@@ -1,0 +1,20 @@
+employee_groups = df.groupby('Employee Name')
+
+#This line groups the data in the Pandas DataFrame df by employee name using the groupby method.
+
+unique_id_counter = 1
+
+#This line initializes a counter for the new unique IDs.
+
+for name, group in employee_groups:
+    group_size = len(group)
+    group_indices = group.index.to_list()
+
+#This loop iterates over each group of employees and retrieves the size of the group (i.e., the number of employees in the group) and the indices of the rows corresponding to the group.
+
+for i in range(group_size):
+        if pd.isna(group.loc[group_indices[i], 'Unique ID']):
+            new_unique_id = f"{unique_id_counter:03d}-{group.iloc[0]['Unique ID'].split('-')[1]}"
+            df.at[group_indices[i], 'Unique ID'] = new_unique_id
+            unique_id_counter += 1
+This loop iterates over each employee in the group and checks if they already have a unique ID. If they do not, a new unique ID is constructed by taking the second part of the existing unique ID (i.e., the project ID) and combining it with a three-digit number indicating the sequence of the new unique IDs. The new unique ID is then assigned to the employee in the Pandas DataFrame using the at method. Finally, the counter for the new unique IDs is incremented by 1.
